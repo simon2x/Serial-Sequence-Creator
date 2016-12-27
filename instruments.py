@@ -149,32 +149,34 @@ class InstrumentsDialog(wx.Dialog):
         grid.Add(self.name, pos=(row, 1), span=(0, 2), flag=wx.ALL|wx.EXPAND, border=2)
         
         sizer_controls = wx.BoxSizer(wx.HORIZONTAL)
-        sizer_controls.AddStretchSpacer()
         btn_save = wx.Button(right_panel, label="Save", size=(64,24))
         btn_save.Bind(wx.EVT_BUTTON, self.OnSave)
+        btn_saveas = wx.Button(right_panel, label="Save As New", size=(-1,24))
+        btn_saveas.Bind(wx.EVT_BUTTON, self.OnSave)
         sizer_controls.Add(btn_save, 0, wx.ALL, 5)
+        sizer_controls.Add(btn_saveas, 0, wx.ALL, 5)
         
         grid.AddGrowableCol(0)
         grid.AddGrowableCol(1)
                 
         sbox_sizer.Add(grid, 4, wx.ALL|wx.EXPAND, 5)        
-        sbox_sizer.Add(sizer_controls, 1, wx.ALL|wx.EXPAND, 5)
+        sbox_sizer.Add(sizer_controls, 0, wx.ALL|wx.ALIGN_RIGHT, 5)
         
         vsizer2.Add(sbox_sizer, 1, wx.ALL|wx.EXPAND, 5)
         
         hsizer_controls = wx.BoxSizer(wx.HORIZONTAL)
-        btn_cancel = wx.Button(right_panel, label="Add", size=(64,24))
+        btn_cancel = wx.Button(self, label="Cancel", size=(-1,24))
         btn_cancel.Bind(wx.EVT_BUTTON, self.OnCancel)
-        btn_save = wx.Button(right_panel, label="Add", size=(64,24))
-        btn_save.Bind(wx.EVT_BUTTON, self.OnSaveAndClose)
-        hsizer_controls.Add(btn_cancel, 1, wx.ALL, 5)
+        btn_save = wx.Button(self, label="Confirm Changes", size=(-1,24))
+        btn_save.Bind(wx.EVT_BUTTON, self.OnConfirm)
+        hsizer_controls.Add(btn_cancel, 0, wx.ALL, 5)
         hsizer_controls.Add(btn_save, 0, wx.ALL, 5)
         
         self.splitter.SplitVertically(left_panel, right_panel)
         self.splitter.SetSashGravity(0.3)        
         # add to main sizer        
         sizer.Add(self.splitter, 1, wx.ALL|wx.EXPAND, 0)
-        sizer.Add(hsizer_controls, 0, wx.ALL|wx.EXPAND, 0)
+        sizer.Add(hsizer_controls, 0, wx.ALL|wx.ALIGN_RIGHT, 2)
         
         self.SetSizer(sizer)
         sizer.Fit(self)
@@ -253,29 +255,27 @@ class InstrumentsDialog(wx.Dialog):
             data[option] = serial[option].GetValue()
         
         if label == "Save":
-            try:  
-                self.instrument_list.SetItem(self._activated_index, name)
+            try:              
+                activated_index = self.instrument_list.SetItem(self._activated_index, 0, name)
                 self.instrument_list.SetItem(self._activated_index, 1, data["type"])
             except:
-                self.instrument_list.Append([name, data["type"]])
+                activated_index = self.instrument_list.Append([name, data["type"]])
                 
-        elif label == "Save As":        
-            if name in self._instrument_data:
-                dlg = base.ConfirmDialog(self, caption="Instrument name already exists. Overwrite?")
-                dlg = dlg.ShowModal()
-                if not dlg == wx.ID_YES:
-                    btn.Enable()
-                    return
-                    
-        
+        elif label == "Save As New":   
+            activated_index = self.instrument_list.Append([name, data["type"]])
             
+        # if name in self._instrument_data:
+            # dlg = base.ConfirmDialog(self, caption="Instrument name already exists. Overwrite?")
+            # dlg = dlg.ShowModal()
+            # if not dlg == wx.ID_YES:
+                # btn.Enable()
+                # return
             
         self._instruments[activated_index] = data
+        self._activated_index = activated_index
         
-        if name in self._instruments:
-            btn.Enable()
-            return
-        
+        print(self._instruments)
+        return
         self._instruments.append(name)    
         if overwrite is False:
             self.instrument_list.Append([name, data["type"]])
@@ -289,7 +289,7 @@ class InstrumentsDialog(wx.Dialog):
         btn.Enable()
         self.instrument_list.SetFocus()
     
-#end OnAdd def
+#end OnConfirm def
 
     def SetInstrumentData(self, data):
         print(data)
@@ -301,13 +301,17 @@ class InstrumentsDialog(wx.Dialog):
     def GetValue(self):
         return self._instruments
 
-    def OnSaveAndClose(self, event):
-        self.EndModal(wx.ID_YES)
-    
+#end GetValue def
+
+    def OnConfirm(self, event):
+        self.EndModal(wx.ID_OK)
+        
+#end OnConfirm def
+
     def OnCancel(self, event):
         self.EndModal(wx.ID_CANCEL)
         
-#end GetValue def
+#end OnCancel def
 
     def GetId(self, event):
         """ query for instrument ID """
