@@ -523,12 +523,12 @@ class SequencesPanel(wx.Panel):
         if not data:
             return
         if text == "setup instrument":
-            selection = self.sequence_items["setup"]
+            selection = self.sequence_items["0,0"]
             self._instruments[data["type"]].append(data["global"])
         else:    
             selection = self.sequence_tree.GetSelection()
             if not selection.IsOk():
-                selection = self.sequence_items["main"]
+                selection = self.sequence_items["0,1"]
             
         newitem = self.sequence_tree.AppendItem(selection, data["action"] + " >> " + str(data["parameters"]))
                 

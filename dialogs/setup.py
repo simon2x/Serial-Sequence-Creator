@@ -29,7 +29,8 @@ class SetupInstruments(wx.Dialog):
                            parent,
                            title="Setup Instruments")
         
-        self._instrument_data = instrument_data        
+        # sort data 
+        self._instrument_data = instrument_data
         
         self._variables = variables
         
@@ -55,7 +56,7 @@ class SetupInstruments(wx.Dialog):
         # row += 1 #let's start at 1, to give some space
         
         ins_lbl = wx.StaticText(panel, label="Instruments:")
-        choices = sorted(self._instrument_data.keys())
+        choices = [k for k in self._instrument_data.keys()]
         self.cbox_ins = wx.ComboBox(panel, choices=choices, style=wx.CB_READONLY)    
         self.cbox_ins.Bind(wx.EVT_COMBOBOX, self.OnInstrumentSelection)
         grid.Add(ins_lbl, pos=(row,0), flag=wx.ALL|wx.EXPAND, border=2)
@@ -220,8 +221,11 @@ class SetupInstruments(wx.Dialog):
         instrument = self._instrument_data[instrument]
         
         for option, value in instrument.items():
+            if option == "name":
+                continue
             self.serial_data[option].SetValue(value)
         
+            
         """ enable channel selection if the instrument is a PSU or multimeter """
         if self.serial_data["type"].GetValue() in ["PSU","Multimeter"]:
             self.spin_channel.Enable()

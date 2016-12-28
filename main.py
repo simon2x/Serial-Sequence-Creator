@@ -5,7 +5,6 @@ Requirements: pySerial, wxPython Phoenix
 glossary and of other descriptions:
 
 DMM - digital multimeter
-
 PSU - power supply
 SBC - single board computer
 INS - general instrument commands
@@ -21,7 +20,7 @@ import wx
 import theme
 import os
 import os.path
-
+from collections import OrderedDict
 from wx.lib.pubsub import setuparg1
 from wx.lib.pubsub import pub
 import wx.lib.agw.aui as aui 
@@ -92,10 +91,6 @@ class Main(wx.Frame):
                 json.dump(self._defaults, file, sort_keys=True, indent=1)
                 self._data = self._defaults
         file.close()
-        #
-        self._instruments = self._data["instruments"]
-        self._preferences = self._data["preferences"]
-        self._sequences = self._data["sequences"]        
         
         #-----
         panel = wx.Panel(self)   
@@ -133,21 +128,28 @@ class Main(wx.Frame):
             
         
         # configuration
-        if self._preferences["pos"] == "0":
+        if self._data["preferences"]["pos"] == "0":
             self.Centre()
         else:   
-            x, y = self._preferences["pos"].split(",")
+            x, y = self._data["preferences"]["pos"].split(",")
             self.SetPosition((int(x), int(y)))
             
-        if self._preferences["size"] == "0":
+        if self._data["preferences"]["size"] == "0":
             pass
         else:   
-            w, h = self._preferences["size"].split(",")
+            w, h = self._data["preferences"]["size"].split(",")
             self.SetSize((int(w), int(h)))    
     
 
     def GetInstrumentData(self):
-        return self._instrument_page.GetInstrumentData()
+        """ return an ordered dictionary of instrument data by index """
+        instrument_dict = OrderedDict()
+        count = len(self._data["instruments"].keys())
+        for idx in range(count):
+            name = self._data["instruments"][str(idx)]["name"]
+            instrument_dict[name] = self._data["instruments"][str(idx)]
+            
+        return instrument_dict
         
 #end GetInstrumentData def
 
@@ -228,11 +230,23 @@ class Main(wx.Frame):
             AboutDialog(self)
         elif label in ["instruments","create instrument presets"]:
             dlg = instruments.InstrumentsDialog(self)
-            dlg.SetInstrumentData(self._instruments)
+            dlg.SetInstrumentData(self._data["instruments"])
             ret = dlg.ShowModal()
+            if ret == wx.ID_OK:
+                ins_data = dlg.GetValue()
+                self._data["instruments"] = ins_data 
+                self.SaveData()
+            dlg.Destroy()
             
 #end DoOperation def
- 
+    
+    def SaveData(self):
+        """ save instruments data and preferences """
+        with open(self._file, 'w') as file: 
+            json.dump(self._data, file, sort_keys=True, indent=1)
+     
+#end SaveData def
+
     def CreateToolbar(self):
         # toolbar = wx.ToolBar(self, style=wx.TB_VERTICAL|wx.TB_TEXT|wx.TB_FLAT)
         toolbar = wx.ToolBar(self)# style=wx.TB_TEXT|wx.TB_FLAT)

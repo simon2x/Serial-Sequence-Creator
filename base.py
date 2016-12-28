@@ -26,7 +26,7 @@ class ToolTip(wx.ToolTip):
 
 class BaseList(wx.ListCtrl, ListCtrlAutoWidthMixin):
     
-    def __init__(self, parent, style=wx.LC_REPORT|wx.LC_HRULES|wx.LC_VRULES):
+    def __init__(self, parent, style=wx.LC_REPORT|wx.LC_HRULES|wx.LC_VRULES|wx.LC_SINGLE_SEL):
         
         wx.ListCtrl.__init__(self, parent, style=style)
         ListCtrlAutoWidthMixin.__init__(self)
@@ -52,27 +52,27 @@ class ConfirmDialog(wx.Dialog):
         
         self.SetTitle(title)
         
-        panel = wx.Panel(self)        
+        # panel = wx.Panel(self)        
         sizer = wx.BoxSizer(wx.VERTICAL)
         
         hsizer = wx.BoxSizer(wx.HORIZONTAL)
-        caption = wx.StaticText(panel, label=caption)
+        caption = wx.StaticText(self, label=caption)
         hsizer.Add(caption, 0, wx.ALL|wx.EXPAND)
         
         hsizer2 = wx.BoxSizer(wx.HORIZONTAL)
-        hsizer2.AddStretchSpacer(0)
-        for label, id in [("Yes", wx.ID_YES),
-                          ("No", wx.ID_NO)]:
-            btn = wx.Button(panel, id=id, label=label)
+        # hsizer2.AddStretchSpacer(0)
+        for label, id in [("No", wx.ID_NO), ("Yes", wx.ID_YES)]:
+            btn = wx.Button(self, id=id, label=label)
             btn.Bind(wx.EVT_BUTTON, self.OnButton)
             hsizer2.Add(btn, 0, wx.ALL, 2)
             
         sizer.AddSpacer(20)
-        sizer.Add(hsizer, 0, wx.ALL|wx.EXPAND, 5)
-        sizer.AddStretchSpacer()
-        sizer.Add(wx.StaticLine(panel), 0, wx.ALL|wx.EXPAND, 2)
-        sizer.Add(hsizer2, 0, wx.ALL|wx.ALIGN_RIGHT, 5)
-        panel.SetSizer(sizer)
+        sizer.Add(hsizer, 2, wx.ALIGN_CENTRE, 5)
+        # sizer.AddStretchSpacer()
+        sizer.Add(wx.StaticLine(self), 0, wx.ALL|wx.EXPAND, 2)
+        sizer.Add(hsizer2, 1, wx.ALL|wx.ALIGN_CENTRE, 5)
+        
+        self.SetSizer(sizer)
         
         #key events binding
         # self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)

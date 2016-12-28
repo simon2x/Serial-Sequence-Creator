@@ -1,5 +1,58 @@
 {
- "instruments": {},
+ "instruments": {
+  "0": {
+   "baudrate": "9600",
+   "bytesize": "8",
+   "flowcontrol": "None",
+   "id": "",
+   "idcmd": "*IDN?",
+   "name": "retaining order",
+   "parity": "None",
+   "port": "COM1",
+   "stopbits": "1",
+   "timeout": "1",
+   "type": "Multimeter"
+  },
+  "1": {
+   "baudrate": "9600",
+   "bytesize": "8",
+   "flowcontrol": "None",
+   "id": "",
+   "idcmd": "*IDN?",
+   "name": "modified",
+   "parity": "None",
+   "port": "COM1",
+   "stopbits": "1",
+   "timeout": "1",
+   "type": "Multimeter"
+  },
+  "2": {
+   "baudrate": "9600",
+   "bytesize": "8",
+   "flowcontrol": "None",
+   "id": "",
+   "idcmd": "*IDN?",
+   "name": "NewIns",
+   "parity": "None",
+   "port": "COM1",
+   "stopbits": "1",
+   "timeout": "1",
+   "type": "Multimeter"
+  },
+  "3": {
+   "baudrate": "9600",
+   "bytesize": "8",
+   "flowcontrol": "None",
+   "id": "",
+   "idcmd": "*IDN?",
+   "name": "finish",
+   "parity": "None",
+   "port": "COM1",
+   "stopbits": "1",
+   "timeout": "1",
+   "type": "Multimeter"
+  }
+ },
  "preferences": {
   "pos": "0",
   "size": "0",
