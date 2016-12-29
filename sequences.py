@@ -463,7 +463,7 @@ class SequencesPanel(wx.Panel):
             if not variables:
                 variables = self._variables["globals"]
             else:
-                variables = variables
+                variables = variables   
         else:
             scope = self.GetTopLevel()
             if not variables:
@@ -480,7 +480,7 @@ class SequencesPanel(wx.Panel):
             # del functions[functions.index(toplevel)]
             dlg = dialogs.callfunction.CallFunction(self, functions, variables)
         elif label == "set voltage":
-            instruments = sorted(self._instruments["PSU"])
+            instruments = self.GetTopLevelParent().GetInstrumentNames("PSU")
             dlg = dialogs.setvoltage.SetVoltage(self, instruments)
         elif label == "step voltage":
             instruments = sorted(self._instruments["PSU"])

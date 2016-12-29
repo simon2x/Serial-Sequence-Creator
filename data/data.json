@@ -51,6 +51,32 @@
    "stopbits": "1",
    "timeout": "1",
    "type": "Multimeter"
+  },
+  "4": {
+   "baudrate": "9600",
+   "bytesize": "8",
+   "flowcontrol": "None",
+   "id": "",
+   "idcmd": "*IDN?",
+   "name": "testing",
+   "parity": "None",
+   "port": "COM1",
+   "stopbits": "1",
+   "timeout": "1",
+   "type": "PSU"
+  },
+  "5": {
+   "baudrate": "9600",
+   "bytesize": "8",
+   "flowcontrol": "None",
+   "id": "",
+   "idcmd": "*IDN?",
+   "name": "psu",
+   "parity": "None",
+   "port": "COM1",
+   "stopbits": "1",
+   "timeout": "1",
+   "type": "PSU"
   }
  },
  "preferences": {

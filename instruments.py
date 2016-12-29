@@ -271,14 +271,8 @@ class InstrumentsDialog(wx.Dialog):
 #end OnListItemSelected def
 
     def SetInstrumentData(self, data):
-        self._instruments = {}
-        # for index, instr in data.items():
-            # idx = int(index) 
-            # item = self.instrument_list.InsertItem(idx, str(index))
-            # self.instrument_list.SetItem(item, 1, instr["name"])
-            # self._instruments[index] = instr
-            
-        count = len(data.keys())    
+        self._instruments = data
+        count = len(data.keys())
         for idx in range(count):            
             idx_str = str(idx) 
             instr = data[idx_str]
@@ -299,11 +293,12 @@ class InstrumentsDialog(wx.Dialog):
         selected = self._selected_index
                 
         # get serial options
-        serial = self.serial_data
-        data = {}
-        for option in self.serial_options:
-            data[option] = serial[option].GetValue()
-        self._instruments[str(selected)] = data
+        if selected >= 0:
+            serial = self.serial_data
+            data = {}
+            for option in self.serial_options:
+                data[option] = serial[option].GetValue()
+            self._instruments[str(selected)] = data
         
         self.EndModal(wx.ID_OK)
         

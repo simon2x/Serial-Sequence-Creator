@@ -92,6 +92,7 @@ class Main(wx.Frame):
                 self._data = self._defaults
         file.close()
         
+        
         #-----
         panel = wx.Panel(self)   
         sizer = wx.BoxSizer(wx.HORIZONTAL)        
@@ -140,18 +141,39 @@ class Main(wx.Frame):
             w, h = self._data["preferences"]["size"].split(",")
             self.SetSize((int(w), int(h)))    
     
+#end __init__ def
 
-    def GetInstrumentData(self):
-        """ return an ordered dictionary of instrument data by index """
-        instrument_dict = OrderedDict()
+    def GetInstrumentData(self, type=None):
+        """ return an ordered dictionary of instrument data by index """        
+        
+        if not type:
+            return self._data["instruments"]
+        else:
+            instrument_dict = {}
+            count = len(self._data["instruments"].keys())
+            for idx in range(count):
+                ins_type = self._data["instruments"][str(idx)]["type"]
+                if type != ins_type:
+                    continue
+                instrument_dict[str(idx)] = self._data["instruments"][str(idx)]
+               
+        return instrument_dict
+                
+#end GetInstrumentData def
+
+    def GetInstrumentNames(self, type=None):
+        """ return an ordered dictionary of instrument data by index """        
+        
+        instrument_list = []
         count = len(self._data["instruments"].keys())
         for idx in range(count):
-            name = self._data["instruments"][str(idx)]["name"]
-            instrument_dict[name] = self._data["instruments"][str(idx)]
-            
-        return instrument_dict
-        
-#end GetInstrumentData def
+            ins_type = self._data["instruments"][str(idx)]["type"]
+            if type == ins_type or not type:                
+                instrument_list.append(self._data["instruments"][str(idx)]["name"])
+               
+        return instrument_list
+                
+#end GetInstrumentNames def
 
     def OnCloseWindow(self, event):
         # self._data["instruments"] = self._instrument_data

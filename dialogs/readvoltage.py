@@ -42,8 +42,8 @@ class ReadVoltage(wx.Dialog):
         # row += 1 #let's start at 1, to give some space
         
         lbl_dmm = wx.StaticText(panel, label="Digital Multimeter Read:")
-        choices = ["Choose on execution"]
-        self.cbox_dmm = wx.ComboBox(panel, choices=choices, value=choices[0])
+        choices = []
+        self.cbox_dmm = wx.ComboBox(panel, choices=choices)
         grid.Add(lbl_dmm, pos=(row,0), flag=wx.ALL|wx.EXPAND, border=5)
         grid.Add(self.cbox_dmm, pos=(row,1), span=(0,3), flag=wx.ALL|wx.EXPAND, border=5)
         grid.AddGrowableCol(1)

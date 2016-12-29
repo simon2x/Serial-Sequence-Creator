@@ -42,7 +42,8 @@ class SetVoltage(wx.Dialog):
         # row += 1 #let's start at 1, to give some space
         
         lbl_psu = wx.StaticText(panel, label="Power Supply:")
-        choices = instruments
+        choices = ["Choose on execution"]
+        choices.extend(instruments)
         self.cbox_psu = wx.ComboBox(panel, choices=choices)
         # self.cbox_psu.Bind(wx.EVT_COMBOBOX, self.OnPsuSelected)
         grid.Add(lbl_psu, pos=(row,0), flag=wx.ALL|wx.EXPAND, border=5)
